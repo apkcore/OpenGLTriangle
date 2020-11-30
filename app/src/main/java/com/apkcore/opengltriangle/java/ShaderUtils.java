@@ -75,7 +75,7 @@ public class ShaderUtils {
             is.read(data);
             is.close();
             result = new String(data, "UTF-8");
-            result.replace("\\r\\n", "\\n");
+            result.replaceAll("\\r\\n", "\\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
