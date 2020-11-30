@@ -4,27 +4,15 @@
 #include "log/ApkcoreLog.h"
 #include "shader/ShaderUtils.h"
 
+AAssetManager *g_pAssetManager = NULL;
 GLint vPosition;
 GLint program;
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_apkcore_opengltriangle_natives_NativeOperate_glInit(JNIEnv *env, jobject thiz) {
 
-    char *vertexShaderSource = "#version 300 es\n"
-                               "\n"
-                               "layout(location = 0) in vec4 vPosition;\n"
-                               "\n"
-                               "void main() {\n"
-                               "    gl_Position = vPosition;\n"
-                               "}";
-    char *fragmentShaderSource = "#version 300 es\n"
-                                 "\n"
-                                 "precision mediump float;\n"
-                                 "out vec4 fragColor;\n"
-                                 "\n"
-                                 "void main() {\n"
-                                 "    fragColor = vec4 ( 1.0, 0.0, 0.0, 1.0 );\n"
-                                 "}";
+    char *vertexShaderSource = readAssetFile("vertex.vsh", g_pAssetManager);
+    char *fragmentShaderSource = readAssetFile("fragment.fsh", g_pAssetManager);
     program = createProgram(vertexShaderSource, fragmentShaderSource);
     if (program == GL_NONE) {
         LOGE("gl init faild!");
@@ -35,8 +23,10 @@ Java_com_apkcore_opengltriangle_natives_NativeOperate_glInit(JNIEnv *env, jobjec
 
 }extern "C"
 JNIEXPORT void JNICALL
-Java_com_apkcore_opengltriangle_natives_NativeOperate_glResize(JNIEnv *env, jobject thiz, jint width,
-                                                       jint height) {
+Java_com_apkcore_opengltriangle_natives_NativeOperate_glResize(
+        JNIEnv *env, jobject thiz,
+        jint width,
+        jint height) {
     glViewport(0, 0, width, height); // 设置视距窗口
 
 }extern "C"
@@ -58,4 +48,15 @@ Java_com_apkcore_opengltriangle_natives_NativeOperate_glDraw(JNIEnv *env, jobjec
     glEnableVertexAttribArray(vPosition);
     // 3. 绘制
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_apkcore_opengltriangle_natives_NativeOperate_registerAssetManager(
+        JNIEnv *env,
+        jobject thiz,
+        jobject asset_manager) {
+    if (asset_manager) {
+        g_pAssetManager = AAssetManager_fromJava(env, asset_manager);
+    } else {
+        LOGE("assetManager is null!")
+    }
 }

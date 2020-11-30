@@ -12,4 +12,6 @@ public class NativeOperate {
     public native void glResize(int width, int height);
 
     public native void glDraw();
+
+    public native void registerAssetManager(AssetManager assetManager);
 }

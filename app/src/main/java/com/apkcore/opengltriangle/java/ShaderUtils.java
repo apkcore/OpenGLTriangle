@@ -1,7 +1,11 @@
 package com.apkcore.opengltriangle.java;
 
+import android.content.res.Resources;
 import android.opengl.GLES30;
 import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ShaderUtils {
     private static final String TAG = "ShaderUtils";
@@ -60,5 +64,21 @@ public class ShaderUtils {
             return GLES30.GL_NONE;
         }
         return program;
+    }
+
+    public static String loadFromAssets(String fileName, Resources resources) {
+        String result = null;
+        try {
+            InputStream is = resources.getAssets().open(fileName);
+            int length = is.available();
+            byte[] data = new byte[length];
+            is.read(data);
+            is.close();
+            result = new String(data, "UTF-8");
+            result.replace("\\r\\n", "\\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

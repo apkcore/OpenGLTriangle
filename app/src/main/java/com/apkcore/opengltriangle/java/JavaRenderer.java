@@ -24,20 +24,8 @@ public class JavaRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        String vertexShaderSource = "#version 300 es\n" +
-                "layout(location = 0) in vec4 vPosition;\n" +
-                "\n" +
-                "void main() {\n" +
-                "    gl_Position = vPosition;\n" +
-                "}";
-        String fragmentShaderSource = "#version 300 es\n" +
-                "\n" +
-                "precision mediump float;\n" +
-                "out vec4 fragColor;\n" +
-                "\n" +
-                "void main() {\n" +
-                "    fragColor = vec4 ( 1.0, 0.0, 0.0, 1.0 );\n" +
-                "}";
+        String vertexShaderSource = ShaderUtils.loadFromAssets("vertex.vsh", mContext.getResources());
+        String fragmentShaderSource = ShaderUtils.loadFromAssets("fragment.fsh", mContext.getResources());
         program = ShaderUtils.createProgram(vertexShaderSource, fragmentShaderSource);
         if (program == GLES30.GL_NONE) {
             Log.e(TAG, "gl init faild!");

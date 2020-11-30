@@ -20,7 +20,7 @@ public class NativeRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-//        nativeOperate.registerAssetManager(mContext.getAssets());
+        nativeOperate.registerAssetManager(mContext.getAssets());
         nativeOperate.glInit();
     }
 
