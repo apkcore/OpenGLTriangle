@@ -16,7 +16,7 @@ public class JavaRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "JavaRenderer";
     private Context mContext;
     private int program;
-    private int vPosition;
+//    private int vPosition;
 
     public JavaRenderer(Context context) {
         this.mContext = context;
@@ -30,8 +30,8 @@ public class JavaRenderer implements GLSurfaceView.Renderer {
         if (program == GLES30.GL_NONE) {
             Log.e(TAG, "gl init faild!");
         }
-        vPosition = GLES30.glGetAttribLocation(program, "vPosition");
-        Log.d(TAG, "vPosition:" + vPosition);
+//        vPosition = GLES30.glGetAttribLocation(program, "vPosition");
+//        Log.d(TAG, "vPosition:" + vPosition);
         GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // 背景颜色设置为黑色 RGBA (range: 0.0 ~ 1.0)
     }
 
@@ -61,8 +61,9 @@ public class JavaRenderer implements GLSurfaceView.Renderer {
         // 1. 选择使用的程序
         GLES30.glUseProgram(program);
         // 2. 加载顶点数据
-        GLES30.glVertexAttribPointer(vPosition, vertexCount, GLES30.GL_FLOAT, false, 3 * 4, vertexBuffer);
-        GLES30.glEnableVertexAttribArray(vPosition);
+        // opengl3.0，使用layout(location = 0)已经指定location可以直接使用
+        GLES30.glVertexAttribPointer(0, vertexCount, GLES30.GL_FLOAT, false, 3 * 4, vertexBuffer);
+        GLES30.glEnableVertexAttribArray(0);
         // 3. 绘制
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount);
     }

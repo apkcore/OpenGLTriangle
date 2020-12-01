@@ -5,7 +5,7 @@
 #include "shader/ShaderUtils.h"
 
 AAssetManager *g_pAssetManager = NULL;
-GLint vPosition;
+//GLint vPosition;
 GLint program;
 extern "C"
 JNIEXPORT void JNICALL
@@ -17,8 +17,8 @@ Java_com_apkcore_opengltriangle_natives_NativeOperate_glInit(JNIEnv *env, jobjec
     if (program == GL_NONE) {
         LOGE("gl init faild!");
     }
-    vPosition = glGetAttribLocation(program, "vPosition");
-    LOGD("vPosition: %d", vPosition);
+//    vPosition = glGetAttribLocation(program, "vPosition");
+//    LOGD("vPosition: %d", vPosition);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // 背景颜色设置为黑色 RGBA (range: 0.0 ~ 1.0)
 
 }extern "C"
@@ -44,8 +44,9 @@ Java_com_apkcore_opengltriangle_natives_NativeOperate_glDraw(JNIEnv *env, jobjec
     // 1. 选择使用的程序
     glUseProgram(program);
     // 2. 加载顶点数据
-    glVertexAttribPointer(vPosition, vertexCount, GL_FLOAT, GL_FALSE, 3 * sizeof(float), vertices);
-    glEnableVertexAttribArray(vPosition);
+    // opengl3.0，使用layout(location = 0)已经指定location可以直接使用
+    glVertexAttribPointer(0, vertexCount, GL_FLOAT, GL_FALSE, 3 * sizeof(float), vertices);
+    glEnableVertexAttribArray(0);
     // 3. 绘制
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }extern "C"
